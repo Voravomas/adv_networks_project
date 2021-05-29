@@ -1,4 +1,4 @@
-# Adding support of node migration for multimode mining setup with config
+# Adding support of node migration for multimode mininet setup with config
 
 ## Task:
 1. Have at least 3 FRR routers in a cluster (2 routers on one server and one on another)<br/>
