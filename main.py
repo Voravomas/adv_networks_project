@@ -53,8 +53,8 @@ def run(topology, topology_name, daemons):
     # TODO: add ip to comand line arguments
     create_tunnel('10.10.240.22', '10.10.244.65', 1000)
     for node_name in topology.TUNNELS.keys():
-        for int_name in topology.TUNNELS[node_name]:
-            create_session(int_name)
+        for (int_name, session_id) in topology.TUNNELS[node_name]:
+            create_session(int_name, session_id)
             Intf(int_name, node=net.getNodeByName(node_name))
 
     net.start()
