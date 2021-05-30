@@ -24,9 +24,9 @@ class CustomTopology(Topo):
         "Create custom topo"
 
         # Add host, router, switch
-        host1Ping = self.addHost("h1")
-        switch1 = self.addSwitch("s1")
-        router1 = self.addHost("r1", cls=LinuxRouter)
+        host1Ping = self.addHost("h_1")
+        switch1 = self.addSwitch("s_1")
+        router1 = self.addHost("r_1", cls=LinuxRouter)
 
         # Add links
         self.addLink(host1Ping, switch1)

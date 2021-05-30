@@ -12,4 +12,4 @@ def get_topology(topology_name):
         raise KeyError("Topology \"{}\" not supported".format(topology_name))
 
     # Extract the topology class.
-    return importlib.import_module(f'{topology_name}/topo.py').CustomTopology
+    return importlib.import_module(f'{topology_name}.topo').CustomTopology
