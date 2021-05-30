@@ -4,7 +4,8 @@ import sys
 
 from mininet.net import Mininet
 from mininet.cli import CLI
-from utils import get_topology
+from utils import get_topology, create_tunnel, create_session
+from mininet.net import Intf
 
 FRR_BIN_DIR = "/usr/lib/frr"
 DAEMONS = ["zebra", "staticd", "bgpd"]
@@ -48,6 +49,14 @@ def run(topology, topology_name, daemons):
 
     # Start Mininet.
     net = Mininet(topo=topology())
+
+    # TODO: add ip to comand line arguments
+    create_tunnel('10.10.240.22', '10.10.244.65', 1000)
+    for node_name in topology.TUNNELS.keys():
+        for int_name in topology.TUNNELS[node_name]:
+            create_session(int_name)
+            Intf(int_name, node=net.getNodeByName(node_name))
+
     net.start()
 
     for node in net.hosts:

@@ -18,6 +18,8 @@ class CustomTopology(Topo):
     h1(ping) - s1 - r1
     """
 
+    TUNNELS = {'r_1': ['eth12', 'eth13']}
+
     def build(self):
         "Create custom topo"
 
@@ -34,3 +36,5 @@ class CustomTopology(Topo):
                      router1,
                      intfName1='s1-eth2',
                      intfName2='r1-eth1')
+
+

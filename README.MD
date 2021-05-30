@@ -19,3 +19,5 @@
 
 * To add internet to Mininet: `sudo dhclient eth1`
 
+* Add l2tp tunnel: `sudo ip l2tp add tunnel tunnel_id 1000 peer_tunnel_id 1000 encap udp local <LOCAL_IP> remote <REMOTE_IP> udp_sport 60000 udp_dport 60000`
+* Add session: `sudo ip l2tp add session name eth12 tunnel_id 1000 session_id 2000 peer_session_id 2000`
