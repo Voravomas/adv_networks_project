@@ -15,7 +15,7 @@ class LinuxRouter(Node):
         super(LinuxRouter, self).terminate()
 
 
-class Topo1(Topo):
+class CustomTopology(Topo):
     """
     Topology for left part
     h1(ping) - s1 - r1
@@ -26,14 +26,14 @@ class Topo1(Topo):
         # Add host, router, switch
         host1Ping = self.addHost("h1")
         switch1 = self.addSwitch("s1")
-        router1 = self.addHost("r1", cls=LinuxRouter, ip='10.0.0.3/24')
+        router1 = self.addHost("r1", cls=LinuxRouter)
 
         # Add links
         self.addLink(host1Ping, switch1)
         self.addLink(switch1,
                     router1,
-                    intfName2='r1-eth1',
-                    params2={'ip': '10.0.0.3/24'})
+                    intfName2='r1-eth1')
+
 
 
 def run():
