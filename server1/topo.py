@@ -21,7 +21,7 @@ class CustomTopology(Topo):
     TUNNELS = {'r_1': [('eth12', 2012), ('eth13', 2013)]}
 
     def build(self):
-        "Create custom topo"
+        """Create custom topo"""
 
         # Add host, router, switch
         host1Ping = self.addHost("h_1")

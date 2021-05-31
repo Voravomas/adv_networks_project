@@ -38,7 +38,7 @@ def clean():
               .format(' '.join(os.listdir(FRR_BIN_DIR))))
 
 
-def run(topology, topology_name, daemons):
+def run(topology, topology_name, daemons, source_ip, remote_ip):
     """Start a network experiment.
 
     """
@@ -50,8 +50,7 @@ def run(topology, topology_name, daemons):
     # Start Mininet.
     net = Mininet(topo=topology())
 
-    # TODO: add ip to comand line arguments
-    create_tunnel('10.10.240.22', '10.10.244.65', 1000)
+    create_tunnel(source_ip, remote_ip, 1000)
     for node_name in topology.TUNNELS.keys():
         for (int_name, session_id) in topology.TUNNELS[node_name]:
             create_session(int_name, session_id)
@@ -85,6 +84,8 @@ def main():
         description='Launch an FRR network experiment in Mininet.')
     parser.add_argument('-t', '--topology', required=True,
                         help='the topology of the network')
+    parser.add_argument('-sip', '--source-ip', required=True, help='This machine IP address')
+    parser.add_argument('-rip', '--remote-ip', required=True, help='Remote machine IP address')
     args = parser.parse_args()
 
     run(get_topology(args.topology), args.topology, DAEMONS)
