@@ -19,7 +19,7 @@ class CustomTopology(Topo):
                 |
                 r2
     """
-    TUNNELS = {'r_2': ['eth12'], 'r_3': ['eth13']}
+    TUNNELS = {'r_2': [('eth12', 2012)], 'r_3': [('eth13', 2013)]}
 
     def build(self):
         "Create custom topo"

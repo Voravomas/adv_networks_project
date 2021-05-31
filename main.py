@@ -88,7 +88,7 @@ def main():
     parser.add_argument('-rip', '--remote-ip', required=True, help='Remote machine IP address')
     args = parser.parse_args()
 
-    run(get_topology(args.topology), args.topology, DAEMONS)
+    run(get_topology(args.topology), args.topology, DAEMONS, args.source_ip, args.remote_ip)
 
 
 if __name__ == "__main__":
