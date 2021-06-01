@@ -73,6 +73,20 @@ def run(topology, topology_name, daemons, source_ip, remote_ip):
             node.cmd("sysctl -w net.ipv4.ip_forward=1")
             node.waitOutput()
 
+
+    with open('tmp', 'w') as f:
+        print('''cisco
+enable
+cisco
+conf t
+int lo
+ip a 10.10.10.10/32
+exit
+exit
+exit
+''', file=f)
+    print(net.getNodeByName('r_3').cmd('telnet localhost 2601 < tmp > running 2>&1'))
+
     CLI(net)
     net.stop()
     if daemons:
