@@ -59,10 +59,14 @@ def run(topology, topology_name, daemons, source_ip, remote_ip):
     net.start()
 
     for node in net.hosts:
+        print(f'{node.name}: {node.IP()}')
+        node.cmd(f'ip a del dev {node.name.replace("_", "")}-eth1 {node.IP()}')
         for daemon in daemons:
             conf_file = os.path.join(root_dir, topology_name, 'conf', daemon, f'{node.name}.conf')
             if os.path.exists(conf_file):
                 start_daemon(node, daemon, conf_file)
+            else:
+                print(f'Could not find conf/{daemon}/{node.name}.conf file')
 
         if node.name.startswith('r'):
             # Enable IP forwarding

@@ -29,6 +29,7 @@ class CustomTopology(Topo):
         switch2 = self.addSwitch("s_2")
         router2 = self.addHost("r_2", cls=LinuxRouter)
         router3 = self.addHost("r_3", cls=LinuxRouter)
+
         # Add links
         self.addLink(host2, switch2,
                      intfName1='h2-eth1',

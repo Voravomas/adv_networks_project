@@ -15,7 +15,12 @@ def get_topology(topology_name):
     return importlib.import_module(f'{topology_name}.topo').CustomTopology
 
 
+def _remove_tunnel(tunnel_id):
+    os.system(f'ip l2tp del tunnel tunnel_id {tunnel_id}')
+
+
 def create_tunnel(local_ip, remote_ip, tunnel_id=1000):
+    _remove_tunnel(tunnel_id)
     os.system(
         f'ip l2tp add tunnel tunnel_id {tunnel_id} peer_tunnel_id {tunnel_id} encap udp local {local_ip} remote {remote_ip} udp_sport 60000 udp_dport 60000')
 
