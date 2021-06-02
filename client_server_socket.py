@@ -1,37 +1,46 @@
 import socket
+import sys
 
-STOP_WORD = "END".encode('utf-8')
-BUF_SIZE = 2**32  # 32768
+BUF_SIZE = 2**15  # 32768
 
 
-def server(server_host_port: tuple) -> list:
+def server(server_host_port: tuple) -> str:
     """
-    Function that listens for a message from server_host_port
-    until STOP_WORD is received and returns a list of all messages
+    Function that waits for one message from client
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(server_host_port)
 
     print("Started server")
-    res = []
-    while True:
-        data, addr = s.recvfrom(BUF_SIZE)
-        res.append(data.decode('utf-8'))
-        if data == STOP_WORD:
-            break
-    s.close()
-    return res
+    print(s)
+    s.listen(1)
+    conn, addr = s.accept()
+    print("Connected to client")
+
+    data = conn.recv(BUF_SIZE)
+    if data:
+        print(data.decode('utf-8'))
+    conn.close()
+    return data.decode('utf-8')
 
 
-def client(client_host_port: tuple, server_host_port: tuple, msg: str) -> None:
+def client(server_host_port: tuple, msg: str) -> None:
     """
-    Function that sends information to server_host_port
-    from client_host_port
+    Function that sends msg to server_host_port
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(client_host_port)
-
+    s.connect(server_host_port)
+    print(s)
     s.sendto(msg.encode('utf-8'), server_host_port)
-    s.sendto(STOP_WORD, server_host_port)
     s.close()
     return
+
+
+def main():
+    argv = sys.argv
+    if argv[1] == "client":
+        client((argv[2], int(argv[3])), argv[4])
+    elif argv[1] == "server":
+        server((argv[2], int(argv[3])))
+
+main()
