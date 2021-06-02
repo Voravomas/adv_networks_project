@@ -4,7 +4,7 @@ import sys
 
 from mininet.net import Mininet
 from mininet.cli import CLI
-from utils import get_topology, create_tunnel, create_session
+from utils import get_topology, create_tunnel, create_session, set_loopback_ip, get_running_config
 from mininet.net import Intf
 
 FRR_BIN_DIR = "/usr/lib/frr"
@@ -73,19 +73,9 @@ def run(topology, topology_name, daemons, source_ip, remote_ip):
             node.cmd("sysctl -w net.ipv4.ip_forward=1")
             node.waitOutput()
 
-
-    with open('tmp', 'w') as f:
-        print('''cisco
-enable
-cisco
-conf t
-int lo
-ip a 10.10.10.10/32
-exit
-exit
-exit
-''', file=f)
-    print(net.getNodeByName('r_3').cmd('telnet localhost 2601 < tmp > running 2>&1'))
+    # TODO: rewrite script and its arguments
+    set_loopback_ip(net.getNodeByName('r_1'))
+    print(get_running_config(net.getNodeByName('r_1'), 'zebra'))
 
     CLI(net)
     net.stop()
