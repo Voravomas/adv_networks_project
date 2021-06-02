@@ -76,9 +76,36 @@ def test_set_loopback_ip(topology):
     assert 'ip address 11.12.13.14/32' in get_running_config(node, 'zebra')
 
 
+def test_internal_ping():
+    if pytest.topo.name == 'server1':
+        host_name = 'h_1'
+        ip_to_test = '10.100.1.5'
+    else:
+        host_name = 'h_2'
+        ip_to_test = '10.100.2.4'
 
-def test_routers_ping():
-    pass
+    for i in range(5):
+        if 'ms' in pytest.net.getNodeByName(host_name).cmd(f'ping {ip_to_test} -c 1')[:-10]:
+            break
+        time.sleep(1)
+    else:
+        raise AssertionError("Host cannot ping a router")
+
+
+def test_external_ping():
+    if pytest.topo.name == 'server1':
+        host_name = 'h_1'
+        ip_to_test = '10.2.0.2'
+    else:
+        host_name = 'h_2'
+        ip_to_test = '10.1.0.2'
+
+    for i in range(30):
+        if 'ms' in pytest.net.getNodeByName(host_name).cmd(f'ping {ip_to_test} -c 1')[:-10]:
+            break
+        time.sleep(1)
+    else:
+        raise AssertionError("Host cannot ping another host")
 
 
 def test_clean():
