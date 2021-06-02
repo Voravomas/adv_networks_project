@@ -3,9 +3,36 @@ import sys
 import importlib
 import time
 
+FRR_BIN_DIR = "/usr/lib/frr"
+DAEMONS = ["zebra", "staticd", "bgpd"]
+
+
+def start_daemon(node, daemon, conf_file):
+    node.cmd("{bin_dir}/{daemon}"
+             " -f {conf_file}"
+             " -d"
+             " -i /tmp/{node_name}-{daemon}.pid"
+             " > /tmp/{node_name}-{daemon}.out 2>&1"
+             .format(bin_dir=FRR_BIN_DIR,
+                     daemon=daemon,
+                     conf_file=conf_file,
+                     node_name=node.name))
+    node.waitOutput()
+
+
+def clean():
+    """Clean all state left over from a previous experiment.
+
+    """
+    os.system("rm -f /tmp/R*.log /tmp/R*.pid /tmp/R*.out")
+    os.system("rm -f /tmp/h*.log /tmp/h*.pid /tmp/h*.out")
+    os.system("mn -c >/dev/null 2>&1")
+    os.system("killall -9 {} > /dev/null 2>&1"
+              .format(' '.join(os.listdir(FRR_BIN_DIR))))
+
 
 def get_topology(topology_name):
-    root_dir = os.path.dirname(sys.modules['__main__'].__file__)
+    root_dir = os.getcwd()
 
     # Check if the topology directory exists.
     topo_dir = os.path.join(root_dir, topology_name)

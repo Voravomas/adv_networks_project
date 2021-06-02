@@ -19,6 +19,7 @@ class CustomTopology(Topo):
     """
 
     TUNNELS = {'r_1': [('eth13', 2013)], 'r_5': [('eth52', 2052)]}
+    name = 'server1'
 
     def build(self):
         """Create custom topo"""

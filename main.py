@@ -73,7 +73,6 @@ def run(topology, topology_name, daemons, source_ip, remote_ip):
             node.cmd("sysctl -w net.ipv4.ip_forward=1")
             node.waitOutput()
 
-    # TODO: rewrite script and its arguments
     set_loopback_ip(net.getNodeByName('r_1'))
     print(get_running_config(net.getNodeByName('r_1'), 'zebra'))
 
