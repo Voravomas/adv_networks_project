@@ -9,7 +9,7 @@ def server(server_host_port: tuple) -> list:
     Function that listens for a message from server_host_port
     until STOP_WORD is received and returns a list of all messages
     """
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(server_host_port)
 
     print("Started server")
@@ -28,7 +28,7 @@ def client(client_host_port: tuple, server_host_port: tuple, msg: str) -> None:
     Function that sends information to server_host_port
     from client_host_port
     """
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(client_host_port)
 
     s.sendto(msg.encode('utf-8'), server_host_port)
