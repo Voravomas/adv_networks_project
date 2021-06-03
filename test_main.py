@@ -117,6 +117,7 @@ def test_external_ping():
 def test_socket_connection(source_ip):
     from client_server_socket import client, server
     # TODO: CHANGE SOURCE IP
+    # IT WORKS!
     s_ip = "192.168.56.103"
     if pytest.topo.name == "server1":
         res = server((s_ip, 5000))
