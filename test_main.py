@@ -114,13 +114,15 @@ def test_external_ping():
         raise AssertionError("Host cannot ping another host")
 
 
-def test_socket_connection():
+def test_socket_connection(source_ip):
     from client_server_socket import client, server
+    # TODO: CHANGE SOURCE IP
+    s_ip = "192.168.56.103"
     if pytest.topo.name == "server1":
-        res = server((source_ip, 5000))
+        res = server((s_ip, 5000))
         print(res)
     elif pytest.topo.name == "server2":
-        client((remote_ip, 5000), "MESSAGE!!!")
+        client((s_ip, 5000), "MESSAGE!!!")
 
 
 def test_clean():
