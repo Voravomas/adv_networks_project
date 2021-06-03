@@ -55,7 +55,7 @@ def get_running_config(node, daemon):
 
 
 def _remove_tunnel(tunnel_id):
-    print(os.popen(f'ip l2tp del tunnel tunnel_id {tunnel_id}').read())
+    print(os.popen(f'ip l2tp del tunnel tunnel_id {tunnel_id}').read(), end="")
     time.sleep(1)
 
 
