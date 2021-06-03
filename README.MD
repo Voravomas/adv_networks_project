@@ -16,7 +16,7 @@
 1. **DONE** Create Basic Topology
 2. **DONE** Create Server1 config and test it
 3. **DONE** Create Server2 config and test it
-4. Test connectivity between servers
+4. **DONE** Test connectivity between servers
 5. Send running config from Server2 to Server1
 6. Migrate R3
 7. Write tests
@@ -26,7 +26,7 @@
 
 
 ## Todo:
-* Write script that deletes autoconfigured links/IP's
+* **DONE** Write script that deletes autoconfigured links/IP's
 
 
 ## Other notes:
