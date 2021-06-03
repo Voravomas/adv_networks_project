@@ -1,15 +1,5 @@
 from mininet.topo import Topo
-from mininet.node import Node
-
-
-class LinuxRouter(Node):
-    def config(self, **params):
-        super(LinuxRouter, self).config(**params)
-        self.cmd('sysctl net.ipv4.ip_forward=1')
-
-    def terminate(self):
-        self.cmd('sysctl net.ipv4.ip_forward=0')
-        super(LinuxRouter, self).terminate()
+from LinuxRouter import LinuxRouter
 
 
 class CustomTopology(Topo):
@@ -19,7 +9,7 @@ class CustomTopology(Topo):
                 |
                 r2
     """
-    TUNNELS = {'r_2': [('eth52', 2052)], 'r_3': [('eth13', 2013)]}
+    TUNNELS = {'r_2': [('eth52', 2052)], 'r_3': [('eth31', 2013)]}
     name = 'server2'
 
     def build(self):

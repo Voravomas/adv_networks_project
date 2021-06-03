@@ -20,6 +20,16 @@ def start_daemon(node, daemon, conf_file):
     node.waitOutput()
 
 
+def ping_test(node, ip_address, seconds):
+    # TODO: change this crap to normal check
+    for i in range(seconds):
+        output = node.cmd(f'ping {ip_address} -c 1')[:-10]
+        if 'ms' in output:
+            return True
+        time.sleep(1)
+    return False
+
+
 def clean():
     """Clean all state left over from a previous experiment.
 
@@ -66,5 +76,7 @@ def create_tunnel(local_ip, remote_ip, tunnel_id=1000):
 
 
 def create_session(int_name, session_id=2000, tunnel_id=1000):
+
     os.system(
         f'ip l2tp add session name {int_name} tunnel_id {tunnel_id} session_id {session_id} peer_session_id {session_id}')
+

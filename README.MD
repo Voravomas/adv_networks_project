@@ -3,6 +3,11 @@
 ## Presentation:
 [Link](https://docs.google.com/presentation/d/1_XS8AXAUyR2-d6jJ0lx79-S-rPiI0-VbIMJfsxXo7tc/edit?usp=sharing)
 
+
+## Usage:
+### Prerequisites:
+* 2 connected VM's with installed `FRR`, `mininet` and `traceroute`
+
 ## Task:
 1. Have at least 3 FRR routers in a cluster (2 routers on one server and one on another)<br/>
 2. Verify connectivity between all routers<br/>
