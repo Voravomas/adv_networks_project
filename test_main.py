@@ -65,8 +65,9 @@ def test_daemons_starting():
             conf_file = os.path.join(os.getcwd(), pytest.topo.name, 'conf', daemon, f'{node.name}.conf')
             if node.name.startswith("h_") and daemon == "bgpd" or \
                     node.name.startswith("r_") and daemon == "staticd":
-                assert os.path.exists(conf_file), f"{daemon} is found in {node.name} when it does not have to"
-                start_daemon(node, daemon, conf_file)
+                continue
+            assert os.path.exists(conf_file), f"{daemon} is found in {node.name} when it does not have to"
+            start_daemon(node, daemon, conf_file)
 
         if node.name.startswith('r'):
             # Enable IP forwarding
