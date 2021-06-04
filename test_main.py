@@ -174,11 +174,19 @@ def test_send_config(source_ip, remote_ip):
         client((remote_ip, 5000), f'{pytest.bgp_conf}\n\nZEBRA:\n{pytest.zebra_conf}')
 
 
-def remove_router():
+def test_remove_router():
+    os.system('ip l2tp del session session_id 2013 tunnel_id 1000')
     if pytest.topo.name == 'server1':
+        interface = pytest.net.getNodeByName('r_1').intf('eth13')
+        pytest.net.getNodeByName('r_1').delIntf(interface)
+        interface.delete()
         return
     print('Removing the router...')
-    pytest.net.delHost('r_3')
+    interface = pytest.net.getNodeByName('r_2').intf('r2-eth2')
+    pytest.net.getNodeByName('r_2').delIntf(interface)
+    interface.delete()
+    pytest.net.delNode(pytest.net.getNodeByName('r_3'))
+
     try:
         pytest.net.getNodeByName('r_3')
     except:
@@ -190,7 +198,7 @@ def remove_router():
 def test_connectivity():
     if pytest.topo.name == 'server2':
         print('Checking that the traffic still goes through...')
-        if not ping_test(pytest.net.getNodeByName('h_2'), '10.1.0.2', 5):
+        if not ping_test(pytest.net.getNodeByName('h_2'), '10.1.0.2', 10):
             raise AssertionError("Host cannot ping another host")
 
 
@@ -208,21 +216,13 @@ def test_create_new_router():
 def test_link_host():
     print('Linking needed nodes and interfaces ....')
     if pytest.topo.name == 'server2':
-        interface = pytest.net.getNodeByName('r_2').intf('r2-eth2')
-        pytest.net.getNodeByName('r_2').delIntf(interface)
-        interface.delete()
-        os.system('ip l2tp del session session_id 2013 tunnel_id 1000')
         time.sleep(1)
         create_session('r2-eth2', 2023)
         time.sleep(1)
         Intf('r2-eth2', node=pytest.net.getNodeByName('r_2'))
 
         return
-    interface = pytest.net.getNodeByName('r_1').intf('eth13')
-    pytest.net.getNodeByName('r_1').delIntf(interface)
-    interface.delete()
 
-    os.system('ip l2tp del session session_id 2013 tunnel_id 1000')
     time.sleep(1)
 
     create_session('r3-eth1', 2023)
@@ -244,10 +244,8 @@ def test_connectivity_to_router_loopback():
     print('Trying to ping the migrated router...')
     if pytest.topo.name == 'server1':
         host_name = 'h_1'
-    else:
-        host_name = 'h_2'
-    if not ping_test(pytest.net.getNodeByName(host_name), '10.100.2.4', 10):
-        raise AssertionError(f"Host {host_name} cannot ping the migrated router")
+        if not ping_test(pytest.net.getNodeByName(host_name), '10.100.2.4', 10):
+            raise AssertionError(f"Host {host_name} cannot ping the migrated router")
 
 
 def test_router_config_saved():
@@ -258,6 +256,21 @@ def test_router_config_saved():
     assert 'ip address 11.12.13.14/32' in running_config, 'Running config is different on migrated router...'
 
 
+def test_connectivity2():
+    print("Testing pings between hosts in different networks...")
+    if pytest.topo.name == 'server1':
+        host_name = 'h_1'
+        ip_to_test = '10.2.0.2'
+    else:
+        host_name = 'h_2'
+        ip_to_test = '10.1.0.2'
+
+    if not ping_test(pytest.net.getNodeByName(host_name), ip_to_test, 30):
+        raise AssertionError("Host cannot ping another host")
+
+
 def test_end_clean():
+    # Giving the other server chance to finish tests
+    time.sleep(5)
     print('Cleanup...')
     clean()
