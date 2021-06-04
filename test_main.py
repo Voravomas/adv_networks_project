@@ -3,7 +3,6 @@ from utils import *
 from mininet.net import Intf
 import pytest
 from LinuxRouter import LinuxRouter
-import logging
 
 DAEMONS = ["zebra", "staticd", "bgpd"]
 
@@ -66,14 +65,8 @@ def test_daemons_starting():
             conf_file = os.path.join(os.getcwd(), pytest.topo.name, 'conf', daemon, f'{node.name}.conf')
             if node.name.startswith("h_") and daemon == "bgpd" or \
                     node.name.startswith("r_") and daemon == "staticd":
-                if os.path.exists(conf_file):
-                    AssertionError(f"{daemon} is found in {node.name} when it does not have to")
-                else:
-                    continue
-            if os.path.exists(conf_file):
+                assert os.path.exists(conf_file), f"{daemon} is found in {node.name} when it does not have to"
                 start_daemon(node, daemon, conf_file)
-            else:
-                AssertionError(f"{daemon} is NOT found in {node.name}")
 
         if node.name.startswith('r'):
             # Enable IP forwarding
@@ -123,7 +116,7 @@ def test_external_ping():
 
 
 def test_traceroute():
-    print("Checking that traffic between hosts goes throught the router 3...")
+    print("Checking that traffic between hosts goes through the router 3...")
     if pytest.topo.name == 'server1':
         assert '10.0.13.2' in pytest.net.getNodeByName('h_1').cmd(
             'traceroute 10.2.0.2'), 'Traffic does not go through router 3'
